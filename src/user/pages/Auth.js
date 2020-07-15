@@ -61,10 +61,38 @@ const Auth = () => {
   const authSubmitHandler = async (event) => {
     event.preventDefault();
 
+    setIsLoading(true);
+
     if (isLoginMode) {
+      try {
+        const response = await fetch(
+          "http://78.63.9.195:5000/api/users/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: formState.inputs.email.value,
+              password: formState.inputs.password.value,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(response.message);
+        }
+
+        const responseData = response.json();
+        console.log(responseData);
+        auth.login();
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+        setError(err.message || "Something went wrong, please try again.");
+      }
     } else {
       try {
-        setIsLoading(true);
         const response = await fetch(
           "http://78.63.9.195:5000/api/users/signup",
           {
@@ -73,7 +101,6 @@ const Auth = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              name: formState.inputs.name.value,
               email: formState.inputs.email.value,
               password: formState.inputs.password.value,
             }),
@@ -81,9 +108,11 @@ const Auth = () => {
         );
 
         const responseData = await response.json();
+
         if (!response.ok) {
           throw new Error(response.message);
         }
+
         console.log(responseData);
         setIsLoading(false);
         auth.login();
