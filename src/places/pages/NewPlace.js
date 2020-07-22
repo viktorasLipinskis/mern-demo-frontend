@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
 
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
@@ -33,6 +34,7 @@ const NewPlace = () => {
     },
     false
   );
+  const history = useHistory();
 
   const placeSubmitHandler = async (event) => {
     event.preventDefault();
@@ -47,9 +49,9 @@ const NewPlace = () => {
       console.log(data);
 
       await sendRequest("http://78.63.9.195:5000/api/places", "POST", data, {
-        "Content-Type": "application-json",
+        "Content-Type": "application/json",
       });
-      //Redirect the user to a different page
+      history.push("/");
     } catch (err) {}
   };
 
