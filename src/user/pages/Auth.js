@@ -72,10 +72,13 @@ const Auth = () => {
           }),
           {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
           }
         );
-        auth.login(responseData.user.id);
-      } catch (err) {}
+        auth.login(responseData.userId, responseData.token);
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       try {
         const responseData = await sendRequest(
@@ -88,9 +91,10 @@ const Auth = () => {
           }),
           {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
           }
         );
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.login);
       } catch (err) {}
     }
   };

@@ -50,6 +50,7 @@ const NewPlace = () => {
 
       await sendRequest("http://78.63.9.195:5000/api/places", "POST", data, {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + auth.token,
       });
       history.push("/");
     } catch (err) {}
